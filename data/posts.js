@@ -1,53 +1,61 @@
+import * as userRepository from './auth.js';
 
 let postsArr = [
     {
         id: '1',
         text: 'crud 테스트 중입니다~! ',
         createDate: Date.now().toString(),
-        name: 'Bob',
-        username: 'bob',
-        url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
+        userId: '1',
       },
       {
         id: '2',
         text: '트위터 클론 코딩!  ',
         createDate: Date.now().toString(),
-        name: 'Ellie',
-        username: 'ellie',
-        url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
+        userId: '1',
       },
       {
         id: '3',
         text: '테스트 코딩!  ',
         createDate: Date.now().toString(),
-        name: 'Ellie',
-        username: 'ellie',
-        url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png',
+        userId: '1',
       },
 ];
 
 export async function getAll(){
-    return postsArr;
+    return Promise.all(
+        postsArr.map(async (post)=>{
+            const { username, name, url } = await userRepository.findById(
+                post.userId
+            );
+            console.log('getAll() ' , username);
+            return {...post, username, name, url};
+        })        
+    );
 }
 
 export async function getAllByUsername(username){
-    return postsArr.filter((post) => post.username ===username);
+    return getAll().then((post) => 
+    postsArr.filter((post) => post.username === username));
 }
 
 export async function getById(id){
-    return postsArr.find((post) => post.id === id);
+    const found = postsArr.find((post) => post.id === id);
+    if(!found){
+        return null;
+    }
+    const { username, name, url } = await userRepository.findById(found.userId);
+    return { ...found, username, name, url};
 }
 
-export async function create(text, name, username){
+export async function create(text, userId){
     const post = {
         id: Date.now().toString(),
         text,
         createDate: new Date(),
-        name,
-        username,
+        userId,
     };
     postsArr = [post, ...postsArr]; //배열 앞부분에 넣어야해서 push가 아닌 이런식으로 넣어주기
-    return post;
+    return getById(post.id);
 }
 
 export async function update(id, text){
@@ -55,7 +63,7 @@ export async function update(id, text){
     if(post){
     post.text = text;
     }
-    return post;
+    return getById(post.id);
 }
 
 export async function remove(id){

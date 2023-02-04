@@ -5,7 +5,6 @@ export async function getPosts(req,res){
     const data = await(username 
         ? postRepository.getAllByUsername(username)
         : postRepository.getAll());
-    console.log('posts select');
     res.status(200).json(data);
 }
 
@@ -20,24 +19,36 @@ export async function getPost( req, res){
 }
 
 export async function createPost(req,res){
-    const {text, name, username} = req.body;
-    const post = await postRepository.create(text, name, username);
+    const {text} = req.body;
+    const post = await postRepository.create(text, req.userId);
     res.status(201).json(post);
 }
 
 export async function updatePost (req,res,next){
     const id = req.params.id;
     const text = req.body.text;
-    const post = await postRepository.update(id, text);
-    if(post){
-        res.status(200).json(post);
-    }else{
-        res.status(404).json({message: `Post id(${id}) not found`});
+    const post = await postRepository.getById(id);
+    
+    if(!post){
+        return res.sendStatus(404);
     }
+    if(post.userId !== req.userId){
+        return res.sendStatus(403);
+    }
+    const updated = await postRepository.update(id, text);
+    res.status(200).json(updated);
 }
 
 export async function deletePost(req,res,next){
     const id = req.params.id;
+    const post = await postRepository.getById(id);
+    if(!post){
+        return res.sendStatus(404);
+    }
+    if(post.userId !== req.userId){
+        return res.sendStatus(403);
+    }
+
     await postRepository.remove(id);
     res.sendStatus(204);
 }
