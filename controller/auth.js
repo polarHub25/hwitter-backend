@@ -11,7 +11,6 @@ const bcryptSaltRounds = 12;
 export async function signup(req,res){
     const {username, password , name, email, url} = req.body;
     const found = await userRepository.findByUsername(username);
-    console.log('authController signup' , req.body.username);
     console.log('authController signup' , req.body.userId);
     if(found){
         return res.status(409).json({message: `{$username} already exists`})

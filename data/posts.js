@@ -27,14 +27,13 @@ export async function getAll(){
             const { username, name, url } = await userRepository.findById(
                 post.userId
             );
-            console.log('getAll() ' , username);
             return {...post, username, name, url};
         })        
     );
 }
 
 export async function getAllByUsername(username){
-    return getAll().then((post) => 
+    return getAll().then((postsArr) => 
     postsArr.filter((post) => post.username === username));
 }
 
