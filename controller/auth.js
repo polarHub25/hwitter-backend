@@ -2,11 +2,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {} from 'express-async-errors';
 import * as userRepository from '../data/auth.js';
+import {config} from '../config.js';
 
-// TODO : Make it secure 서버코드에서 이런걸 가지고있으면 좋지않음! 개선하기
-const jwtSecretKey = 'F2dN7x8HVzBWaQuEEDnhsvHXRWqAR63z';
-const jwtExpiresInDays = '2d';
-const bcryptSaltRounds = 12;
+
 
 export async function signup(req,res){
     const {username, password , name, email, url} = req.body;
@@ -15,7 +13,7 @@ export async function signup(req,res){
     if(found){
         return res.status(409).json({message: `{$username} already exists`})
     }
-    const hashed = await bcrypt.hash(password, bcryptSaltRounds);
+    const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
     const userId = await userRepository.createUser({
         username, 
         password: hashed,
@@ -44,8 +42,9 @@ export async function login(req, res){
 }
 
 function createJwtToken(id){
-    console.log('createJwtToken::', id)
-    return jwt.sign({id}, jwtSecretKey, {expiresIn: jwtExpiresInDays});
+    console.log('createJwtToken::', id);
+    console.log('createJwtToken secret key ', config.jwt.secretKey);
+    return jwt.sign({id}, config.jwt.secretKey, {expiresIn: config.jwt.expiresInSec});
 }
 
 export async function me(req,res,next) {
