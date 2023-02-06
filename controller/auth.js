@@ -9,7 +9,6 @@ import {config} from '../config.js';
 export async function signup(req,res){
     const {username, password , name, email, url} = req.body;
     const found = await userRepository.findByUsername(username);
-    console.log('authController signup' , req.body.userId);
     if(found){
         return res.status(409).json({message: `{$username} already exists`})
     }
@@ -28,8 +27,6 @@ export async function signup(req,res){
 
 export async function login(req, res){
     const {username, password } = req.body;
-    console.log('authController login' , req.body.username);
-    console.log('authController login' , req.body.userId);
     const user = await userRepository.findByUsername(username);
     if(!user){
         return res.status(401).json({message : 'Invalid user or password'});
@@ -49,7 +46,7 @@ function createJwtToken(id){
 
 export async function me(req,res,next) {
     console.log('AuthController::', req.userId)
-    const user = await userRepository.findById(req.body.userId);
+    const user = await userRepository.findById(req.userId);
     if(!user){
         return res.status(404).json({message: 'User not Found'});
     }
