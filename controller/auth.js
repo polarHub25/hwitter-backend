@@ -20,7 +20,6 @@ export async function signup(req,res){
         email,
         url,
     });
-    console.log('auth controller signup에서의 userId', userId);
     const token = createJwtToken(userId);
     res.status(201).json({token, username});
 }
@@ -39,13 +38,10 @@ export async function login(req, res){
 }
 
 function createJwtToken(id){
-    console.log('createJwtToken::', id);
-    console.log('createJwtToken secret key ', config.jwt.secretKey);
     return jwt.sign({id}, config.jwt.secretKey, {expiresIn: config.jwt.expiresInSec});
 }
 
 export async function me(req,res,next) {
-    console.log('AuthController::', req.userId)
     const user = await userRepository.findById(req.userId);
     if(!user){
         return res.status(404).json({message: 'User not Found'});

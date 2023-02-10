@@ -11,17 +11,15 @@ import { sequelize} from './db/database.js';
 
 const app = express();
 
-// const corsOption = {
-//     option: ['http://localhost:3000'],
-//     optionSuccessStatus: 200,
-//     Credential: true,
-
-// };
+const corsOption = {
+    origin: config.cors.allowedOrigin,
+    optionSuccessStatus: 200,
+};
 
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOption));
 
 app.use('/posts', postsRouter);
 app.use('/auth', authRouter);
@@ -32,16 +30,15 @@ app.use((req,res,next) => {
 
 app.use((error, req,res,next)=>{
     console.error(error);
-    //res.status(500).send('Sorry, try later!');
     res.sendStatus(500);
 });
 
 //db.getConnection().then(connection => console.log(connection));
 
 //Sequelize 연결 후 서버 실행
-sequelize.sync().then(client => {
-    //console.log(client);
-    const server = app.listen(config.host.port);
+sequelize.sync().then(() => {
+    console.log(`Server is Started....... ${new Date()}`);
+    const server = app.listen(config.port);
     initSocket(server);
 })
 

@@ -3,7 +3,6 @@ import * as postRepository from '../data/posts.js';
 
 export async function getPosts(req,res){
     const username = req.query.username;
-    console.log('controller get ' , username);
     const data = await(username 
         ? postRepository.getAllByUsername(username)
         : postRepository.getAll());

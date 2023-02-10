@@ -11,7 +11,6 @@ export const isAuth = async (req,res,next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    // TODO : Make it secure
     jwt.verify(
         token,
         config.jwt.secretKey,
