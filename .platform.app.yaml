@@ -1,5 +1,5 @@
 # The name of this app. Must be unique within a project.
-name: hwitter
+name: htwitter
 
 # The runtime the application uses. The 'type' key defines the base container
 # image that will be used to run the application. There is a separate base
@@ -20,7 +20,7 @@ mounts:
     source_path: uploads
 
 # The size of the persistent disk of the application (in MB).
-disk: 512
+disk: 256
 
 # The relationships of the application with services or other applications.
 #
@@ -30,12 +30,11 @@ disk: 512
 relationships:
     mysqldatabase: 'dbmysql:mysql'
 
-
 web:
   commands: 
     start: "node app.js"
 
-  #NGINX
+  @NGINX
   locations:
     '/':
       passthru: true
