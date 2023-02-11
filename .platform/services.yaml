@@ -1,11 +1,8 @@
-dbmysql:
-    type: oracle-mysql:8.0
-    disk: 512
-    configuration:
+configuration:
         schemas:
-          - main
+            - main
         endpoints:
-            maindb:
+            mysql:
                 default_schema: main
                 privileges:
                     main: admin
