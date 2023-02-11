@@ -10,7 +10,7 @@ dbmysql:
     disk: 512
     configuration:
         schemas:
-          - maindb
+          - main
         endpoints:
             maindb:
                 default_schema: main
