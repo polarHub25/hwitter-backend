@@ -1,14 +1,14 @@
 # Each route describes how an incoming URL is going to be processed by Platform.sh.
-"https://www.{default}/":
+'https://www.{default}/':
     type: upstream
-    upstream: "hwitter:http"
+    upstream: 'hwitter:http'
 
-"https://{default}/":
+'https://{default}/':
     type: redirect
-    to: "https://www.{default}/"
+    to: 'https://www.{default}/'
 
-"https://www.{default}/ws":
+'https://www.{default}/ws':
     type: upstream
-    upstream: "hwitter:http"    
+    upstream: 'hwitter:http'   
     cache:
       enabled: false
