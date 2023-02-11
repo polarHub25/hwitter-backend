@@ -34,7 +34,7 @@ web:
   commands: 
     start: "node app.js"
 
-  @NGINX
+  #NGINX
   locations:
     '/':
       passthru: true
