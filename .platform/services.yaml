@@ -15,4 +15,4 @@ dbmysql:
             maindb:
                 default_schema: main
                 privileges:
-                    maindb: admin
+                    main: admin
