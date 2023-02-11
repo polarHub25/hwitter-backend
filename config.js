@@ -3,6 +3,8 @@ dotenv.config();
 
 function required(key, defaultValue = undefined){
     const value = process.env[key] || defaultValue;
+    console.log('config.js ::' , value);
+    console.log('config.js ::' , key);
     if(value == null){
         throw new Error(`Key ${key} is undefined`);
     }
